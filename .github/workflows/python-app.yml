@@ -3,17 +3,13 @@
 
 name: Flask application
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: push
 
 permissions:
   contents: read
 
 jobs:
-  build_test_deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,6 +36,12 @@ jobs:
         pip install pytest
         pytest
 
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: test
+
+    steps:
     - name: Build TarBall
       uses: a7ul/tar-action@v1.1.0
       with:
