@@ -1,6 +1,6 @@
-from app import index
+from app import hello
 
 
-def test_hello_world():
-    result = index()
-    assert result == '<h1>Test app</h1>'
+def test_hello():
+    result = hello()
+    assert result == "Hello, world!"
