@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build_test_deploy:
 
     runs-on: ubuntu-latest
 
@@ -37,3 +37,21 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+
+    - name: Create TarBall
+    - uses: a7ul/tar-action@v1.1.0
+        with:
+          command: c
+          cwd: "./"
+          files: |
+            app.py
+            wsgi.py
+            captain-definition
+          outPath: deploy.tar
+
+      - name: Deploy App to CapRover
+        uses: caprover/deploy-from-github@v1.0.1
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: '${{ secrets.APP_NAME }}'
+          token: '${{ secrets.APP_TOKEN }}' 
