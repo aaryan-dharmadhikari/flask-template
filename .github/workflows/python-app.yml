@@ -46,7 +46,6 @@ jobs:
         files: |
           requirements.txt
           app.py
-          wsgi.py
           captain-definition
         outPath: deploy.tar
 
