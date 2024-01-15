@@ -37,7 +37,7 @@ jobs:
 
     - name: Test
       run: |
-        pip install pytest
+        pip install .[test]
         pytest
 
     - name: Build TarBall
