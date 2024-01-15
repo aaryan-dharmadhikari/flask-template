@@ -10,4 +10,4 @@ COPY . /app
 EXPOSE 80
 
 ENTRYPOINT ["python"]
-CMD ["-m" , "flask", "--app=src/app", "run", "--host=0.0.0.0", "--port=80"]
+CMD ["-m" , "flask", "--app=src/myapp", "run", "--host=0.0.0.0", "--port=80"]
