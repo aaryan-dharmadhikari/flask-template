@@ -13,7 +13,20 @@ It includes a GitHub Actions workflow that lints and tests your code. This actio
 
 ### Local Development
 
-Requires Python 3.8 or higher.
+Clone the repository:
+```shell
+git clone https://github.com/aaryan-dharmadhikari/flask-template
+cd flask-template
+```
+
+Requires Python 3.8 or higher and `virtualenv` to be installed.
+
+Setup virtual environment:
+```shell
+python -m venv .venv
+source .venv/bin/activate
+```
+Make sure to activate the virtual environment every time you open a new terminal.
 
 Install dependencies:
 ```shell
@@ -24,26 +37,31 @@ Run the application:
 ```shell
 python -m flask --app src/myapp run --debug
 ```
-
 View the application at http://localhost:5000.
+
+Flask automatically reloads the application when changes are made.
+Press `Ctrl+C` to stop running debug mode.
 
 ### Docker
 
-Requires Docker engine.
+Requires Docker engine to be installed.
 
-Build `myapp` image:
+Build image:
 ```shell
 docker build --tag flask-template-docker .
 ```
+This must be done between changes to the source code.
 
-Run `myapp` container:
+Run container:
 ```shell
-docker run -d -p 5000:80 --name myapp flask-template-docker
+docker run -p 5000:80 --name myapp flask-template-docker
 ```
-
-Note: The container is configured to run the application on port 80 inside the container.
-
 View the application at http://localhost:5000.
+
+Press `Ctrl+C` to stop the container. The `-d` flag can be added to the above command to run the container in the background.
+
+Note: The docker image is configured to run the application on port 80 inside the container.
+
 
 ## Testing
 
