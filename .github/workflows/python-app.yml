@@ -36,7 +36,7 @@ jobs:
 
     - name: Test
       run: |
-        pip install pytest
+        pip install .[test]
         pytest
 
   deploy:
@@ -54,7 +54,7 @@ jobs:
         command: c
         cwd: "./"
         files: |
-          app.py
+          src/
           requirements.txt
           Dockerfile
           captain-definition
