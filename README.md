@@ -5,7 +5,7 @@ This is a template Flask application that can be used to quickly bootstrap a new
 
 The project is laid out according to the Flask and pytest best practices.
 
-It includes a GitHub Actions workflow that lints and tests your code. This action can be easily configured to deploy to a CapRover instance (see [Deploy](#deploy)).
+It includes a GitHub Actions workflow that lints and tests your code. This action can be easily configured to deploy to a ImPaaS Cluster (see [Deploy](#deploy)).
 
 ## Features
 
@@ -15,7 +15,7 @@ It includes a GitHub Actions workflow that lints and tests your code. This actio
 
 Clone the repository:
 ```shell
-git clone https://github.com/aaryan-dharmadhikari/flask-template
+git clone https://github.com/impaas/flask-template
 cd flask-template
 ```
 
@@ -87,11 +87,16 @@ The `Test` action runs `pytest` to run unit tests.
 
 ### Deployment
 
-The `Deploy App to CapRover` action packs the application into a tarball and uploads it to CapRover.
+The `Deploy App to Tsuru` action builds and publishes an image, then deploys it to the cluster.
 
 For this action to work, the following secrets must be set in the repository:
-- `CAPROVER_SERVER`: the URL of the CapRover server.
-- `APP_NAME`: the name of the application on CapRover.
-- `APP_TOKEN`: the CapRover application token (found under Deployment).
+- `TEAM_DEPLOYMENT_TOKEN`:
+    - This can be created by running:
+    ```bash
+    $ tsuru token create --id {TOKEN_NAME} --team {TEAM_NAME} --description "CI token"
+    ```
+- `APP_NAME`: the name of the application on the tsuru instance.
 
-See the [CapRover docs](https://caprover.com/docs/ci-cd-integration/deploy-from-github.html#deploying-directly-from-github) for more information.
+Repo must be public to deploy via actions!
+
+See the [Tsuru docs](https://docs.tsuru.io/stable/) for more information.
