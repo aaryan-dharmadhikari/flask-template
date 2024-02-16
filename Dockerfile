@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
-EXPOSE 80
+EXPOSE 5000
 
 ENTRYPOINT ["python"]
-CMD ["-m" , "flask", "--app=src/myapp", "run", "--host=0.0.0.0", "--port=80"]
+CMD ["-m" , "flask", "--app=src/myapp", "run", "--host=0.0.0.0"]

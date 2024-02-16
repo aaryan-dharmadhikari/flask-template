@@ -1,4 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint. It will then deploy to CapRover.
+# This workflow will install Python dependencies, run tests and lint. It will then deploy to our ImPaaS Cluster.
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: Flask application
@@ -7,6 +7,7 @@ on: push
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   test:
@@ -45,24 +46,30 @@ jobs:
     needs: test
 
     steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Build Tarball
-      uses: a7ul/tar-action@v1.1.0
-      with:
-        command: c
-        cwd: "./"
-        files: |
-          src/
-          requirements.txt
-          Dockerfile
-          captain-definition
-        outPath: deploy.tar
 
-    - name: Deploy App to CapRover
-      uses: caprover/deploy-from-github@v1.0.1
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
       with:
-        server: '${{ secrets.CAPROVER_SERVER }}'
-        app: '${{ secrets.APP_NAME }}'
-        token: '${{ secrets.APP_TOKEN }}'
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest 
+
+    - name: Deploy App to ImPaaS
+      run: |
+        curl --location --request \
+        POST 'http://impaas.uk/apps/${{ secrets.APP_NAME }}/deploy?image=ghcr.io%2F${{ github.repository_owner }}%2F${{ github.repository }}%3Alatest' \
+        --header 'Authorization: Bearer ${{ secrets.TEAM_DEPLOYMENT_TOKEN }}'
