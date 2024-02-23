@@ -68,8 +68,10 @@ jobs:
         push: true
         tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest 
 
-    - name: Deploy App to ImPaaS
-      run: |
-        curl --location --request \
-        POST 'http://impaas.uk/apps/${{ secrets.APP_NAME }}/deploy?image=ghcr.io%2F${{ github.repository_owner }}%2F${{ github.repository }}%3Alatest' \
-        --header 'Authorization: Bearer ${{ secrets.TEAM_DEPLOYMENT_TOKEN }}'
+    - name: ImPaaS-Deploy
+      id: impaas-deploy
+      uses: /impaas/impaas-deploy@v2
+      with:
+        app-name: ${{ secrets.APP_NAME }}
+        deployment-token: ${{ secrets.TEAM_DEPLOYMENT_TOKEN }}
+        method: DOCKER_IMAGE
